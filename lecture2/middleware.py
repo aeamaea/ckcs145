@@ -8,7 +8,7 @@ def test1() :
 
 
 @app.route('/test2')
-def test1() :
+def test2() :
     return "Accessed endpoint test2:  powered by Flask!!!"
 
 if __name__ == '__main__':
