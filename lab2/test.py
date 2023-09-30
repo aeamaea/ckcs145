@@ -9,10 +9,11 @@ def test1():
 def param_home():
     return 'Parameter may be submitted to this url.'
 
-@app.route('/param/<name>')
-def param_submit(name):
+@app.route('/param/<simon>')
+def param_submit(simon):
     # return 'Parameter %s!' % name
-    return render_template('test.html', name=name)
+    return render_template('test.html', name=simon)
 
+def 
 if __name__ == '__main__':
    app.run(host='0.0.0.0', port='5090')
