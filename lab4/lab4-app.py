@@ -21,6 +21,8 @@ def disp(num):
 @app.route('/test', methods=['POST'])
 def test():
     if request.method == 'POST':
+        print(request.form.keys())
+        print(request.form.get('Id'))
         data_id = request.form.get('Id')
         data_customer = request.form.get('Customer')
         data_quantity = request.form.get('Quantity')
