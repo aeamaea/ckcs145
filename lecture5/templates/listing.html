@@ -1,0 +1,21 @@
+<html>
+    <body>
+         <h1>Records in the database </h1>        
+         <table>
+            <tr>
+                <th>Cust ID</th>
+                <th>Cust Name</th>
+                <th>Quantity</th>
+                <th>Price</th>
+            </tr>
+            {% for cust_obj in customer_objects %}
+            <tr>
+                <td>{{cust_obj.customer_id}}</td> 
+                <td>{{ cust_obj.name}}</td>
+                <td>{{cust_obj.quantity}}</td>
+                <td>{{cust_obj.price}}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </body>
+</html>
