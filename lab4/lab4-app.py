@@ -13,10 +13,15 @@ def home():
         data = request.get_json()
         return data # don't "jsonify" cuz it's already json
     
+@app.route('/home')
+def just_home():
+    return '<h3>If you call /home/3 magical things will happen</h3>'
+  
+
 @app.route('/home/<int:num>', methods=['GET'])
 def disp(num):
-    #return jsonify({'data':num**2})
-    return 
+    return jsonify({'data':num**2})
+    #return 
 
 @app.route('/test', methods=['POST'])
 def test():
