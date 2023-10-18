@@ -69,6 +69,31 @@ def update_customer():
         
         return(jsonify({"customer":customer.to_json()}))
 
+@app.route('/delete', methods=["POST"])
+def delete_customer():
+    form_customer_id = request.form.get('customer_id')
+    form_name = request.form.get('name')
+    form_price = request.form.get('price')
+    form_quantity = request.form.get('quantity')
+
+    # Get customer from the backend by giving the Customer object the customer_id 
+    # we got from the form
+    customers = Customer.objects(customer_id=form_customer_id)
+    customer = customers.first() # This gives the first item in the QuerySet or None
+
+    # print(form_customer_id,form_name,form_price,form_quantity)
+    # print(customer.to_json())
+
+
+    if not customer:
+        return("Customer not found!")
+    else:
+        # No need to set customer_id because the customer object already has that 
+        
+        customer.delete()         # Nuke it with a vengeance!
+        
+        
+        return("Deleted Customer with id: "+form_customer_id)
 
 
 @app.route('/list', methods=['GET'])
