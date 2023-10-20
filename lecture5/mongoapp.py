@@ -70,8 +70,8 @@ def update_customer():
         customer.quantity=form_quantity
         customer.save()         # this basically saves it in the mongo back end.
         
-        
-        return(jsonify({"customer":customer.to_json()}))
+        return redirect("/list")
+        #return(jsonify({"customer":customer.to_json()}))
 
 @app.route('/delete/<cust_id>')
 def delete_custid(cust_id):
@@ -103,16 +103,19 @@ def delete_customer():
 
 @app.route('/list', methods=['GET'])
 def list_customers():
-    #print(db) # print out what db we're in
 
-    # for customer in Customer.objects :
-    #     print("\n-------\ncustomer: ", customer.name,"\ncustomer price : ",customer.price)
+    next_cust_id = 0    # Initialize var, not sure if we even need to?
+    
+    # Get all the customers so we can display them. Never mind the pagination concerns :)
+    customers=Customer.objects
 
-
-    customers=list(Customer.objects)
-    # return "Success!"
-    return render_template('listing.html',customer_list=customers )
-    #return list(Customer.objects)
+    # Get the max customer id and add one to it , then pass it to
+    # the listing.html so the New Entry field can be pre-populated 
+    # in case the user wants to enter a new row. :: aeam
+    # see https://stackoverflow.com/a/25059302 (how to get max of a column value)
+    max_cust_id = customers.order_by("-customer_id").limit(-1).first().customer_id
+    next_cust_id = max_cust_id + 1
+    return render_template('listing.html',customer_list=list(customers),next_cust_id=next_cust_id)
 
 
 if __name__ == "__main__":

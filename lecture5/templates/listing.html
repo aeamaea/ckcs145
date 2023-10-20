@@ -1,6 +1,7 @@
 <html>
     <body>
-         <h1>Records in the database </h1>        
+         <h1>Inventory </h1>   
+         <div>     
          <table>
             <tr>
                 <th>Cust ID</th>
@@ -20,5 +21,18 @@
             </tr>
             {% endfor %}
         </table>
+        </div>
+        <HR/>
+        <H3>Enter Data:</H3>
+        <div>
+            <form action=/create method="POST">
+            
+                <input type="number" id="CustomerID" name="customer_id" value="{{next_cust_id}}">
+                <input type="text" id="CustomerName" name="name" placeholder="Customer Name">
+                <input type="number" id="Quantity" name="quantity" placeholder="Quantity" min="1" max="1000000">
+                <input type="number" id="Price" name="price" placeholder="Price" min="1" max="1000000">
+                <input type="submit" value="Insert"><br/>
+            </form>
+            </div>
     </body>
 </html>
