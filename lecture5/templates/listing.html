@@ -7,6 +7,7 @@
                 <th>Cust Name</th>
                 <th>Quantity</th>
                 <th>Price</th>
+                <th>Delete?</th>
             </tr>
             {% for cust_obj in customer_list %}
             <tr>
@@ -14,6 +15,8 @@
                 <td>{{ cust_obj.name}}</td>
                 <td>{{cust_obj.quantity}}</td>
                 <td>{{cust_obj.price}}</td>
+                <td><a href="delete/{{cust_obj.customer_id}}">Delete</a></td>
+                <td><a href="update-form/{{cust_obj.customer_id}}">Update</a></td>
             </tr>
             {% endfor %}
         </table>

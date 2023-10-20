@@ -13,15 +13,15 @@
           </style>
     </header>
     <body>
-        <form action=/create method="POST">
+        <form action=/update method="POST">
             <label for="CustomerID">ID------:</label>
-            <input type="text" id="CustomerID" name="customer_id" ><br/>
+            <input type="text" id="CustomerID" name="customer_id" value={{customer.customer_id}}><br/>
             <label for="Customer">Customer:</label>
-            <input type="text" id="CustomerName" name="name"><br/>
+            <input type="text" id="CustomerName" name="name" value={{customer.name}}><br/>
             <label for="Quantity">Quantity:</label>
-            <input type="text" id="Quantity" name="quantity"><br/>
+            <input type="text" id="Quantity" name="quantity" value={{customer.quantity}}><br/>
             <label for="Price">Price---:</label>
-            <input type="text" id="Price" name="price"><br/><br/>
+            <input type="text" id="Price" name="price" value={{customer.price}}><br/><br/>
             <input type="submit" value="submit"><br/>
         </form>
     </body>
