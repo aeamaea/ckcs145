@@ -1,0 +1,38 @@
+<html>
+    <body>
+         <h1>Inventory </h1>   
+         <div>     
+         <table>
+            <tr>
+                <th>Cust ID</th>
+                <th>Cust Name</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Delete?</th>
+            </tr>
+            {% for cust_obj in customer_list %}
+            <tr>
+                <td>{{cust_obj.customer_id}}</td> 
+                <td>{{ cust_obj.name}}</td>
+                <td>{{cust_obj.quantity}}</td>
+                <td>{{cust_obj.price}}</td>
+                <td><a href="delete/{{cust_obj.customer_id}}">Delete</a></td>
+                <td><a href="update-form/{{cust_obj.customer_id}}">Update</a></td>
+            </tr>
+            {% endfor %}
+        </table>
+        </div>
+        <HR/>
+        <H3>Enter Data:</H3>
+        <div>
+            <form action=/create method="POST">
+            
+                <input type="number" id="CustomerID" name="customer_id" value="{{next_cust_id}}">
+                <input type="text" id="CustomerName" name="name" placeholder="Customer Name">
+                <input type="number" id="Quantity" name="quantity" placeholder="Quantity" min="1" max="1000000">
+                <input type="number" id="Price" name="price" placeholder="Price" min="1" max="1000000">
+                <input type="submit" value="Insert"><br/>
+            </form>
+            </div>
+    </body>
+</html>
