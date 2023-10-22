@@ -1,25 +1,53 @@
-from flask import Flask, jsonify, request, render_template, request, session, abort,redirect
+from flask import Flask, jsonify, request, flash, render_template, request, session, abort,redirect
+from dataclasses import dataclass 
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import select,func, desc 
 
-from flask_mongoengine import MongoEngine
 
 app = Flask(__name__)
 
-app.config['MONGODB_SETTINGS']= {'db':'Inventory', 'host':'localhost', 'port':27017}
-db = MongoEngine()
-db.init_app(app)
+app.config['SQLALCHEMY_DATABASE_URI']= 'postgresql://mikemoloch:tingoo@localhost:5432/inventory'
+db = SQLAlchemy(app)
 
 
-class Customer(db.Document):
-    customer_id = db.IntField()
-    name = db.StringField()
-    quantity = db.IntField()
-    price = db.IntField()
+@dataclass
+class Customer(db.Model):
+    __tablename__ = 'customer'
 
-    meta = {'collection' : 'Customer', 'allow_inheritance' : False}
+    customer_id: int
+    name: str
+    quantity: int
+    price: int
+
+    customer_id = db.Column(db.Integer, primary_key=True, nullable=False)
+    name = db.Column(db.String(128), nullable=False)
+    quantity = db.Column(db.Integer)
+    price = db.Column(db.Integer)
+
 
 @app.route('/')
 def home():
     return render_template("index.html")
+
+@app.route('/list', methods=['GET'])
+def list_customers():
+
+    next_cust_id = 0    # Initialize var, not sure if we even need to?
+    
+    # Get all the customers so we can display them. Never mind the pagination concerns :)
+    customers=Customer.query.all()
+    
+    # Get the max customer id and add one to it , then pass it to
+    # the listing.html so the New Entry field can be pre-populated 
+    # db.session.execute(select(func.max(db.customer.c.customer_id)))
+    
+    # Stupid SQLAlchemy ORM nastiness
+    max_cust_id = Customer.query.order_by(desc(Customer.customer_id)).first().customer_id
+    print(max_cust_id)
+    next_cust_id = max_cust_id + 1
+   
+    return render_template('listing.html',customer_list=list(customers),next_cust_id=next_cust_id)
+
 
 @app.route('/data_entry')
 def data_entry():
@@ -33,15 +61,18 @@ def create_customer():
     quantity = request.form.get('quantity')
 
     new_customer = Customer(customer_id=customer_id,name=name,price=price,quantity=quantity)
-    new_customer.save()
 
+    # Stupid SQLAlchemy gymnastics
+    db.session.add(new_customer)
+    db.session.commit()
+    db.session.flush()
+    
     return redirect("/list")
 
 @app.route('/update-form/<cust_id>', methods=["GET"])
-def update_for(cust_id):
-    customers = Customer.objects(customer_id=cust_id) # Ask Mongo if collection has a document with customer_id we're sending
-    customer = customers.first() # This gives the first item in the QuerySet or None if nothing came back from Mongodb
-
+def update_form(cust_id):
+    customer = Customer.query.get(cust_id) # Ask Mongo if collection has a document with customer_id we're sending
+ 
     return render_template("update_form.html",customer=customer)
 
 @app.route('/update', methods=["POST"])
@@ -53,69 +84,55 @@ def update_customer():
 
     # Get customer from the backend by giving the Customer object the customer_id 
     # we got from the form
-    customers = Customer.objects(customer_id=form_customer_id)
-    customer = customers.first() # This gives the first item in the QuerySet or None
 
-    # print(form_customer_id,form_name,form_price,form_quantity)
-    # print(customer.to_json())
-
+    customer = Customer.query.get(form_customer_id)
 
     if not customer:
+        # we should never get here because 
         return("Customer ID NOT FOUND!")
     else:
         # No need to set customer_id because the customer object already has that 
-        # we'll just update the other fields and hit save()
+        # we'll just update the other fields and persist is through the ORM
         customer.name=form_name
         customer.price=form_price
         customer.quantity=form_quantity
-        customer.save()         # this basically saves it in the mongo back end.
+
+        # persist in postgresql backend.
+        db.session.commit()
+        db.session.flush()       
         
         return redirect("/list")
         #return(jsonify({"customer":customer.to_json()}))
 
 @app.route('/delete/<cust_id>')
 def delete_custid(cust_id):
-    customers = Customer.objects(customer_id=cust_id)
-    customer = customers.first()
+    customer = Customer.query.get(cust_id)
 
     if customer:
-        customer.delete()
+        db.session.delete(customer)
+        db.session.commit()
+        db.session.flush()
 
     return redirect('/list')
 
 
-@app.route('/delete', methods=["POST"])
-def delete_customer():
-    form_customer_id = request.form.get('customer_id')
+# @app.route('/delete', methods=["POST"])
+# def delete_customer():
+#     form_customer_id = request.form.get('customer_id')
 
-    # Get customer from the backend by giving the Customer object the customer_id 
-    # we got from the form
-    customers = Customer.objects(customer_id=form_customer_id)
-    customer = customers.first() # Returns first item in the QuerySet or None
+#     # Get customer from the backend by giving the Customer object the customer_id 
+#     # we got from the form
+#     customers = Customer.objects(customer_id=form_customer_id)
+#     customer = customers.first() # Returns first item in the QuerySet or None
 
-    if not customer:
-        return("Customer not found!")
-    else:
-        # No need to set customer_id because the customer object already has that         
-        customer.delete()         # Nuke it with a vengeance!
-        return("Deleted Customer with id: "+form_customer_id)
+#     if not customer:
+#         return("Customer not found!")
+#     else:
+#         # No need to set customer_id because the customer object already has that         
+#         customer.delete()         # Nuke it with a vengeance!
+#         return("Deleted Customer with id: "+form_customer_id)
 
 
-@app.route('/list', methods=['GET'])
-def list_customers():
-
-    next_cust_id = 0    # Initialize var, not sure if we even need to?
-    
-    # Get all the customers so we can display them. Never mind the pagination concerns :)
-    customers=Customer.objects
-
-    # Get the max customer id and add one to it , then pass it to
-    # the listing.html so the New Entry field can be pre-populated 
-    # in case the user wants to enter a new row. :: aeam
-    # see https://stackoverflow.com/a/25059302 (how to get max of a column value)
-    max_cust_id = customers.order_by("-customer_id").limit(-1).first().customer_id
-    next_cust_id = max_cust_id + 1
-    return render_template('listing.html',customer_list=list(customers),next_cust_id=next_cust_id)
 
 
 if __name__ == "__main__":
