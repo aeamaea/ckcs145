@@ -3,10 +3,17 @@ from dataclasses import dataclass
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import select,func, desc 
 
+# you must pip install python_dotenv first :: aeam
+# Also see: https://pypi.org/project/python-dotenv/#file-format
+
+from dotenv import dotenv_values
 
 app = Flask(__name__)
 
-app.config['SQLALCHEMY_DATABASE_URI']= 'postgresql://mikemoloch:tingoo@localhost:5432/inventory'
+# get secrets from the .env file 
+config=dotenv_values(".env")
+
+app.config['SQLALCHEMY_DATABASE_URI']= 'postgresql://'+config["PG_USER"]+':'+config["PG_PASS"]+'@localhost:5432/inventory'
 db = SQLAlchemy(app)
 
 

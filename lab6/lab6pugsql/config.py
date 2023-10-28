@@ -12,10 +12,15 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 # Your App secret key
 SECRET_KEY = "Aquickbrownfoxjumpsoverthelazydog12!!@"
 
+from dotenv import dotenv_values
+
+# get secrets from the .env file 
+config=dotenv_values(".env")
+
 # The SQLAlchemy connection string.
 # SQLALCHEMY_DATABASE_URI = "sqlite:///" + os.path.join(basedir, "app.db")
 # SQLALCHEMY_DATABASE_URI = 'mysql://myapp@localhost/myapp'
-SQLALCHEMY_DATABASE_URI = 'postgresql://mikemoloch:tingoo@localhost/lab6'
+SQLALCHEMY_DATABASE_URI = 'postgresql://'+config["PG_USER"]+':'+config["PG_PASS"]+'@localhost:5432/lab6'     
 
 # Flask-WTF flag for CSRF
 CSRF_ENABLED = True

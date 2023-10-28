@@ -1,0 +1,5 @@
+PG_USER=postgres
+PG_PASS=torontomet123
+PG_DEV_HOST=localhost
+PG_PORT=5432
+PG_DEV_DB=inventory
