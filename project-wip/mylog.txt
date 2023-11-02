@@ -1,0 +1,19 @@
+10-28-23 :: aeam 
+	Basic Architecture:
+	* Use single app.py
+	* Use Postgresql with pugsql pip module
+	* Use bootstrap to make it "look nice" 
+	* Have admin interface 
+		- Login/Logout
+		- Form to update the "exchange rate"
+		- 
+
+
+
+* TODOS: *
+	- Get bootstrap template
+	- Create flask app skeleton (just app.py? don't get too fancy!)
+	- Use secrets file (.env) so they don't leak out to public when repo is made public
+	- create Postgresql DB (project.db ??) 
+	- 
+

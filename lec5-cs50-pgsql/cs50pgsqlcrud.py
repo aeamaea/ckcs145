@@ -11,7 +11,12 @@ app = Flask(__name__)
 # Ensure templates are auto-reloaded
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 
-db = SQL('postgresql://mikemoloch:tingoo@localhost:5432/inventory')
+from dotenv import dotenv_values
+
+# get secrets from the .env file 
+config=dotenv_values(".env")
+
+db = SQL('postgresql://'+config["PG_USER"]+':'+config["PG_PASS"]+'@localhost:5432/inventory')
 
 
 @app.route('/')
