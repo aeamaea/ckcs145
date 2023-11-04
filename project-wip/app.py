@@ -64,6 +64,10 @@ def homepage():
 
 	return render_template('company.html')
 
+# The delivery Calculator on the HTML page makes a POST request 
+# to this route in the JQuery JS code in the SCRIPT tag This is an AJAX
+# request to this endpoint from the page and then the JS on the html page
+# shows it in line - A project requirement :: aeam
 @app.route("/calc_charges",methods=["POST"])
 def calc_charges():
 
