@@ -216,8 +216,8 @@
 
 <div class="jumbotron text-center" style="background-image: url('/static/pics/food1.png');">
   
-  <h1>J&W Foods</h1> 
-  <p>One stop shop for healthy meals</p> 
+  <h1 style="color:black">J&W Foods</h1> 
+  <h4 style="color:black">One stop shop for healthy meals</h4> 
  
 </div>
 
@@ -225,8 +225,8 @@
 <div id="about" class="container-fluid">
   <div class="row">
     <div class="col-sm-8">
-      <h2>About JW Foods</h2><br>
-      <h4>JW Foods has an illustrious past, and a bright future!</h4><br>
+      <h2>About J&W Foods</h2><br>
+      <h4>JW Foods is a leader in quality prepared meals</h4><br>
       <p>J & W Foods started as a distributor and wholesale/retail butcher shop providing natural premium graded meats. In 2008, they became an Ontario Inspected Meat Plant. As the business grew and evolved, their passion and love for high quality meats and foods was reflected more and more in their store. They soon became known as a one-stop-shop for health and nutrition. They have gained a solid reputation for providing high quality Chicken that is air chilled, grain fed, and raised locally in Ontario without the use of hormones and antibiotics, as well as, Beef (with some being raised without the use of hormones and antibiotics), Pork (all raised without the use of hormones and steroids) and Fish & Seafood (a mix of wild and farmed raised), high quality frozen fruits and vegetables, healthy & clean dressings and sauces, supplements & vitamins and sports nutrition products. </p>
       
     </div>
@@ -267,18 +267,18 @@
   <div class="row slideanim">
     <div class="col-sm-4">
       <span class="glyphicon glyphicon-off logo-small"></span>
-      <h4>Healthy Meals</h4>
+      <h4>Power Packed Meals</h4>
       <p>To give you the power to keep going all day</p>
     </div>
     <div class="col-sm-4">
       <span class="glyphicon glyphicon-heart logo-small"></span>
-      <h4>LOVE</h4>
-      <p>We Love our customers and love to serve them!</p>
+      <h4>Heart Healthy</h4>
+      <p>Our meals are heart healthy!</p>
     </div>
     <div class="col-sm-4">
       <span class="glyphicon glyphicon-lock logo-small"></span>
       <h4>Quality</h4>
-      <p>Quality is job one at Ford Lincoln Mercury</p>
+      <p>We strive for the best quality ingredients.</p>
     </div>
   </div>
   <br><br>
@@ -286,12 +286,12 @@
     <div class="col-sm-4">
       <span class="glyphicon glyphicon-leaf logo-small"></span>
       <h4>GREEN</h4>
-      <p>All our meals have the lowest carbon footprint on the planet.</p>
+      <p>All our meals have the lowest carbon footprint in the industry.</p>
     </div>
     <div class="col-sm-4">
       <span class="glyphicon glyphicon-certificate logo-small"></span>
       <h4>CERTIFIED</h4>
-      <p>Certified delicious baby!</p>
+      <p>Certified non-GMO ingredients</p>
     </div>
     <div class="col-sm-4">
       <span class="glyphicon glyphicon-wrench logo-small"></span>
@@ -370,7 +370,7 @@
     <h4>Enter WEIGHT and DISTANCE to Calculate your Cost</h4>
   </div>
   <div class="col-sm-12 slideanim">
-    <form id="form" >
+    <form id="form1" >
       <div class="row">
         <div class="col-sm-6 form-group">
           <input class="form-control" id="weight" name="weight" placeholder="Weight" type="text" required>
@@ -457,7 +457,7 @@
 
 $(document).ready(function() {
   // console.log ('document ready');
-  $('form').on('submit', function(event) {
+  $('#form1').on('submit', function(event) {
   event.preventDefault();
   console.log("before_ajax");
   $.ajax({
@@ -484,6 +484,35 @@ $(document).ready(function() {
   });
 });
 // end form (ie; form one)
+
+$('#form2').on('submit', function(event) {
+  event.preventDefault();
+  console.log("before_ajax");
+  $.ajax({
+    data : {
+      name : $('#name').val(),
+      email : $('#email').val(),
+      comments : $('#comments').val()
+    },
+    type : 'POST',
+    url : '/add_contact'
+  })
+  .done(function(data) {
+    console.log(data);
+    if (data.error) {
+      $('#contact_status').text(data.error).show();
+      // $('#successAlert').hide();
+    }
+    else {
+      console.log(data.delivery_cost);
+      text_str = "status: "+data.status;
+      $('#contact_status').text(text_str).show();
+      // $('#errorAlert').hide();
+    }
+
+  });
+});
+// end form2 handling
 
 
 }); // end $(document.ready({...}))

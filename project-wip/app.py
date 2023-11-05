@@ -62,7 +62,7 @@ def homepage():
 
 	# print("insert return code: ", insert_result)
 
-	return render_template('company.html')
+	return render_template('company1.1.html')
 
 # The delivery Calculator on the HTML page makes a POST request 
 # to this route in the JQuery JS code in the SCRIPT tag This is an AJAX
@@ -85,7 +85,28 @@ def calc_charges():
 
 	return jsonify({"delivery_cost" : delivery_cost})
 
+@app.route("/add_contact",methods=["POST"])
+def add_contact():
 
+	ip_address = request.remote_addr
+	timestamp = str(datetime.now())
+	contact_name = request.form["name"]
+	email = request.form["email"]
+	comments = request.form["comments"]
+
+	
+	# create a Contacts instance and fill it up with values
+	# then persist it to the MongoDB backend :: aeam
+
+	new_contact = Contacts(ip_address=ip_address,timestamp=timestamp,contact_name=contact_name, email=email, comments=comments)
+	db_opstatus = new_contact.save()
+
+	print("\n\n---\ndb operation status: ",list(db_opstatus),"\n---\n\n")
+
+	if db_opstatus:
+		return jsonify({"status" : "Success"})
+	else:
+		return jsonify({"status":"ERROR"})
 
 
 

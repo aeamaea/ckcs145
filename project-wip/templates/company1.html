@@ -370,7 +370,7 @@
     <h4>Enter WEIGHT and DISTANCE to Calculate your Cost</h4>
   </div>
   <div class="col-sm-12 slideanim">
-    <form id="form" >
+    <form id="form1" action="/calc_charges" method="POST">
       <div class="row">
         <div class="col-sm-6 form-group">
           <input class="form-control" id="weight" name="weight" placeholder="Weight" type="text" required>
@@ -383,7 +383,7 @@
       <div class="row">
         <div class="col-sm-12 form-group">
           <!-- <input type="button" id="calcdeliv_btn" class="btn btn-default pull-right" onClick="calcCost()"> -->
-          <button id="deliv_calc_btn" class="btn btn-default pull-right" type="submit">Calculate</button>
+          <button id="deliv_calc_btn" class="submit-form btn btn-default pull-right" type="submit" value="NOT-submit">Calculate</button>
         </div>
       </div>
     </form>
@@ -409,7 +409,7 @@
       <p><span class="glyphicon glyphicon-envelope"></span> jwinfo@jwfoods.com</p>
     </div>
     <div class="col-sm-7 slideanim">
-        <form id="form2">
+        <form id="form2" action="/add_contact" method="POST" >
           <div class="row">
             <div class="col-sm-6 form-group">
               <input class="form-control" id="name" name="name" placeholder="Name" type="text" required>
@@ -418,13 +418,13 @@
               <input class="form-control" id="email" name="email" placeholder="Email" type="email" required>
             </div>
             <div>
-              <textarea class="form-control" id="comments" name="comments" placeholder="Comment" rows="5"></textarea><br>
+              <textarea class="form-control" id="comments" name="comments" placeholder="Comment" rows="5" Required></textarea><br>
             </div>
           </div>
           
           <div class="row">
             <div class="col-sm-12 form-group">
-              <button id="contact_btn" class="btn btn-default pull-right" type="submit">Send</button>
+              <input id="contact_btn" class="submit-form btn btn-default pull-right" type="submit" value="submit">
             </div>
           </div>
         </form>
@@ -450,43 +450,70 @@
 </footer>
 
 <script>
+// from here: https://w3codegenerator.com/code-snippets/jquery/ajax-for-multiple-form
 
-// from here:
-// ::aeam::110423
-
-
-$(document).ready(function() {
-  // console.log ('document ready');
-  $('form').on('submit', function(event) {
-  event.preventDefault();
-  console.log("before_ajax");
-  $.ajax({
-    data : {
-      weight : $('#weight').val(),
-      distance : $('#distance').val()
-    },
-    type : 'POST',
-    url : '/calc_charges'
-  })
-  .done(function(data) {
-    console.log(data);
-    if (data.error) {
-      $('#delivery_cost').text(data.error).show();
-      // $('#successAlert').hide();
-    }
-    else {
-      console.log(data.delivery_cost);
-      text_str = "Delivery Cost: $"+data.delivery_cost;
-      $('#delivery_cost').text(text_str).show();
-      // $('#errorAlert').hide();
-    }
-
-  });
+$(document).ready(function(){
+    $('.submit-form').on('click', function(e){
+        console.log("submit-form");
+        e.preventDefault();
+        let form =  $(this).closest('form');
+        let formActionUrl = form.attr('action');
+        let type = form.attr('method');
+        let formData = form.serialize();
+        $.ajax({
+            url: formActionUrl,
+            type: type,
+            data: formData,
+            success: function(response){
+              if (form==="form1"){
+                  console.log("form1");
+              } else if (form==="form2") {
+                  console.log("form2");
+              } else {
+                console.log(response);
+              }
+                
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                console.log(xhr.status);
+                console.log(thrownError);
+            }
+        });
+    });
 });
+
+// from here: ?? (find the URL I forget now where I got this snippet from)
+// ::aeam::110423
+// $(document).ready(function() {
+//   // console.log ('document ready');
+//   $('form').on('submit', function(event) {
+//   event.preventDefault();
+//   console.log("before_ajax"); // aeam
+//   $.ajax({
+//     data : {
+//       weight : $('#weight').val(),
+//       distance : $('#distance').val()
+//     },
+//     type : 'POST',
+//     url : '/calc_charges'
+//   })
+//   .done(function(data) {
+//     console.log(data);
+//     if (data.error) {
+//       $('#delivery_cost').text(data.error).show();
+//       // $('#successAlert').hide();
+//     }
+//     else {
+//       console.log(data.delivery_cost);
+//       text_str = "Delivery Cost: $"+data.delivery_cost;
+//       $('#delivery_cost').text(text_str).show();
+//       // $('#errorAlert').hide();
+//     }
+
+//   });
+// });
 // end form (ie; form one)
 
-
-}); // end $(document.ready({...}))
 
 // ================= aeam =================
 
