@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script>
+$(document).ready(function(){
+    $("#twoSelectorTagsBtn").click(function(){
+        $("p.intro").hide();
+        $("h2.intro").hide();
+    });
+
+    $("#oneSelectorTagsBtn").click(function(){
+        $(".intro").hide();
+    });
+});
+</script>
+</head>
+<body>
+
+<h2 class="intro">This is a heading</h2>
+<p class="intro">This is a paragraph.</p>
+<p>This is another paragraph.</p>
+
+<button id="twoSelectorTagsBtn">Two Selector Click me</button>
+<button id="oneSelectorTagsBtn">One Selector Click me</button>
+
+</body>
+</html>

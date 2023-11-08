@@ -11,9 +11,14 @@
 
 
 * TODOS: *
-	- Get bootstrap template
-	- Create flask app skeleton (just app.py? don't get too fancy!)
-	- Use secrets file (.env) so they don't leak out to public when repo is made public
-	- create Postgresql DB (project.db ??) 
-	- 
+✅	- Get bootstrap template
+✅	- Create flask app skeleton (just app.py? don't get too fancy!)
+✅	- Use secrets file (.env) so they don't leak out to public when repo is made public
+✅	- create mongo DB (jwfoods) 
+	    - Created Collections ✅
+	    - finish the lab11 ✅
+	    - connect lab11 user/pw system to the back end ✅
+	    - enhance lab11 login/logout with update of the jwfoods.Coeffs.[weight_coeff,distance_coeffs] 
+		updates and stuff ✅
+	    - put the login/logout (admin code) into the jwfoods app.py and make it work (WIP) 
 

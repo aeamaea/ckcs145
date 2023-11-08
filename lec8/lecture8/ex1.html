@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script>
+
+// added the toggle hide business to the code provided by the 
+// lecturer.
+
+$(document).ready(function(){
+    $("#justHide").click(function(){
+        $("p").hide();
+    });
+
+    $("#toggleHide").click(function(){
+        
+        console.log($("p").is(":hidden"));
+        if ($("p").is(':visible'))
+        {
+            console.log("p is visible");
+            $("p").hide();
+        } else {
+            console.log("p is NOT visible");
+            $("p").show();
+        }
+    });
+});
+</script>
+</head>
+<body>
+
+<h2>This is a heading</h2>
+<p>This is a paragraph.</p>
+<p>This is another paragraph.</p>
+<button id="justHide">Click me to hide paragraphs</button>
+<button id="toggleHide">Toggle the Hiding</button>
+
+</body>
+</html>

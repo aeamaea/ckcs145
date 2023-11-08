@@ -1,0 +1,13 @@
+.full {
+    display:table;
+    width: 100%;
+}
+
+.left, .right {
+    display : table-cell;
+    width : 50%;
+    height : 200px;
+}
+
+.left { background-color : #9AB8DB; }
+.right { background-color: #E5E4E2; }

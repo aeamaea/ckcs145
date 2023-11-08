@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script>
+$(document).ready(function(){
+    $("#hideBtn").click(function(){
+        $("#test").hide();
+        console.log($('body').css('background-color'));
+        if ($('body').css('background-color')=='rgb(0, 255, 255)' ) 
+            
+            {
+                console.log('it WAS blue, I changed it to white!');
+                $('body').css('background-color',"white")
+            }
+        else 
+            {console.log('its NOT blue');}
+    });
+
+    $("#showBtn").click(function(){
+        $("#test").show();
+    });
+
+    // I added this code to see if I could change color and do 
+    // other random stuff. Here I am toggling the body color :: aeam
+    $("#changeColor").click(function(){
+        if ($('body').css('background-color') !=='rgb(0, 255, 255)' )
+            {
+                console.log("in IF");
+                $('body').css('background','aqua') ;
+            }
+        else
+        {   console.log("in else ...");
+            $('body').css('background-color','white') ;}
+    });
+
+});
+</script>
+</head>
+<body>
+
+<h2>This is a heading</h2>
+<p>This is a paragraph.</p>
+<p id="test">This is another paragraph.</p>
+
+<button id="showBtn">Show</button>
+<button id="hideBtn">Hide</button>
+<button id="changeColor">Change Color</button>
+</body>
+</html>
