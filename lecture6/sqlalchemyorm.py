@@ -2,8 +2,15 @@ from flask import Flask, request, request, flash, jsonify
 from dataclasses import dataclass 
 from flask_sqlalchemy import SQLAlchemy
 
+
+
+from dotenv import dotenv_values
+
+# get secrets from the .env file 
+config=dotenv_values(".env")
+
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://mikemoloch:tingoo@127.0.0.1:5432/ckcs145'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://'+config["PG_USER"]+':'+config["PG_PASS"]+'@127.0.0.1:5432/ckcs145'
 db = SQLAlchemy(app)
 
 @dataclass

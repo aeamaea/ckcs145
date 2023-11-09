@@ -180,12 +180,12 @@ def login():
 @app.route('/admin', methods=["GET","POST"])
 @login_required
 def admin():
-        # return 'Logged in as: ' + current_user.id 
+    # return 'Logged in as: ' + current_user.id 
     coeffs_from_db = Coeffs.objects().first()
 
-	#===============
-	#    GET 
-	#===============
+    #===============
+    #    GET 
+    #===============
     if request.method == 'GET':
         return '''
             <h3>Change Values and press Submit</h3>
@@ -199,11 +199,11 @@ def admin():
             '''.format(wcoeff=coeffs_from_db.weight_coeff,dcoeff=coeffs_from_db.distance_coeff)
 
 
-	#===============
-	#    POST 
-	#===============
-	# We're here so the request wasn't a GET , it was a POST ... 
-	# so we just fell through to this code section
+    #===============
+    #    POST 
+    #===============
+    # We're here so the request wasn't a GET , it was a POST ... 
+    # so we just fell through to this code section
 
     # get values from the form fields sent via POST
     weight_coeff = request.form['weight_coeff']

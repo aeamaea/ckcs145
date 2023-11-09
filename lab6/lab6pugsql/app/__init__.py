@@ -3,8 +3,15 @@ import logging
 from flask import Flask, request, jsonify
 
 import pugsql 
+from dotenv import dotenv_values
+
+# get secrets from the .env file  
+# IT MUST EXIST IN same directory where this current file is executed from
+config=dotenv_values(".env")
+
+
 queries = pugsql.module('queries/')
-queries.connect('postgresql://mikemoloch:tingoo@localhost:5432/lab6')
+queries.connect('postgresql://'+config["PG_USER"]+':'+config["PG_PASS"]+'@localhost:5432/lab6')
 
 
 """
