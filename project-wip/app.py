@@ -211,7 +211,7 @@ def admin():
 
     # print(weight_coeff, distance_coeff)
 
-    # we already have the object populated with data from mongh
+    # we already have the object populated with data from mongoDB
     # now we set the objects values to new values from form fields
     coeffs_from_db.weight_coeff = float(weight_coeff)
     coeffs_from_db.distance_coeff = float(distance_coeff)
@@ -219,10 +219,11 @@ def admin():
     # and save it back :: aeam
     coeffs_from_db.save()
 
-    # let the user know stuff happened.
-    flash('Database updated!')
+    # TODO: let the user know stuff happened.
 
-    # redirect back to the route /protected and we should see new values.
+    # redirect back to the route /admin and we should see new values.
+    # This will be redirected as a GET , and so the first part of this
+    # code will be executed == GET == 
     return redirect('/admin')
 
 
