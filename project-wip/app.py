@@ -1,3 +1,6 @@
+#=======
+# HTMX version of the jwfoods app :: aeam :: 11/13/23
+#=======
 import logging
 
 from flask import Flask, request, jsonify, render_template,redirect,url_for, Response, flash
@@ -77,7 +80,8 @@ def homepage():
 
 	# print("insert return code: ", insert_result)
 
-	return render_template('company1.1.html')
+	# return render_template('company1.1.html')
+	return render_template('company_htmx.html')
 
 # The delivery Calculator on the HTML page makes a POST request 
 # to this route in the JQuery JS code in the SCRIPT tag This is an AJAX
@@ -86,42 +90,43 @@ def homepage():
 @app.route("/calc_charges",methods=["POST"])
 def calc_charges():
 
-	distance = float(request.form["distance"])
-	weight = float(request.form["weight"])
+    distance = float(request.form["distance"])
+    weight = float(request.form["weight"])
 
-	# get the coefficients from the Coeff documents 
-	# from the Mongo backend.
-	coeffs = Coeffs.objects.first()
-	weight_coeff=coeffs.weight_coeff
-	dist_coeff=coeffs.distance_coeff
+    # get the coefficients from the Coeff documents 
+    # from the Mongo backend.
+    coeffs = Coeffs.objects.first()
+    weight_coeff=coeffs.weight_coeff
+    dist_coeff=coeffs.distance_coeff
 
-	delivery_cost = round((distance * dist_coeff) + (weight * weight_coeff),2)
-	print(weight,distance,delivery_cost)
+    delivery_cost = round((distance * dist_coeff) + (weight * weight_coeff),2)
+    print(weight,distance,delivery_cost)
 
-	return jsonify({"delivery_cost" : delivery_cost})
+    #return jsonify({"delivery_cost" : delivery_cost})
+
+    # return f'<h6>Delivery cost: {delivery_cost}</h6>'
+    return f'<div id="contact_status" class="alert alert-success" role="alert">Delivery cost: {delivery_cost}</div>'
 
 @app.route("/add_contact",methods=["POST"])
 def add_contact():
+    ip_address = request.remote_addr
+    timestamp = str(datetime.now())
+    contact_name = request.form["name"]
+    email = request.form["email"]
+    comments = request.form["comments"]
+        
+    # create a Contacts instance and fill it up with values
+    # then persist it to the MongoDB backend :: aeam
 
-	ip_address = request.remote_addr
-	timestamp = str(datetime.now())
-	contact_name = request.form["name"]
-	email = request.form["email"]
-	comments = request.form["comments"]
+    new_contact = Contacts(ip_address=ip_address,timestamp=timestamp,contact_name=contact_name, email=email, comments=comments)
+    db_opstatus = new_contact.save()
 
-	
-	# create a Contacts instance and fill it up with values
-	# then persist it to the MongoDB backend :: aeam
+    print("\n\n---\ndb operation status: ",list(db_opstatus),"\n---\n\n")
 
-	new_contact = Contacts(ip_address=ip_address,timestamp=timestamp,contact_name=contact_name, email=email, comments=comments)
-	db_opstatus = new_contact.save()
-
-	print("\n\n---\ndb operation status: ",list(db_opstatus),"\n---\n\n")
-
-	if db_opstatus:
-		return jsonify({"status" : "Success"})
-	else:
-		return jsonify({"status":"ERROR"})
+    if db_opstatus:
+        return f'<div id="contact_status" class="alert alert-success" role="alert">SUCCESS!</div>'
+    else:
+        return f'<div id="contact_status" class="alert alert-success" role="alert">FAIL!</div>'
 
 #----------------   End main page related routes --------------------
 
@@ -152,6 +157,16 @@ def user_loader(email):
 def login():
     if request.method == 'GET':
         return '''
+        <html lang="en">
+        <head>
+            <link rel="stylesheet" href="/static/css/login.css">
+            <script src="https://unpkg.com/htmx.org@1.9.8"></script>
+        </head>
+        
+        <body>
+
+        </body>
+        </html>
             <form action='/login' method='POST'>
                     username &nbsp; <input type='text' name='email' id='email' placeholder='email'/> <br /> &nbsp; <br />
                     password &nbsp; <input type='password' name='password' id='password' placeholder='password'/> <br /> &nbsp; <br />
@@ -188,14 +203,25 @@ def admin():
     #===============
     if request.method == 'GET':
         return '''
+        <html lang="en">
+        <head>
+            <link rel="stylesheet" href="/static/css/login.css">
+            <script src="https://unpkg.com/htmx.org@1.9.8"></script>
+        </head>
+
+        <body>
             <h3>Change Values and press Submit</h3>
-            <form action='/protected' method='POST'>
+            <form action='/admin' method='POST'>
                     weight coefficient &nbsp; <input type='text' name='weight_coeff' id='weight_coeff' placeholder='Weight Coeff like 0.3 etc' value='{wcoeff}' /> <br /> &nbsp; <br />
                     distance coefficient &nbsp; <input type='text' name='distance_coeff' id='distance_coeff' placeholder='Weight Coeff like 0.5 etc' value='{dcoeff}' /> <br /> &nbsp; <br />
                     <input type='submit' name='submit'/>
             </form>
             <br/><br/>
             <h2><a href="logout">LOG OUT</a></h2>
+        </body>
+        </html>
+
+
             '''.format(wcoeff=coeffs_from_db.weight_coeff,dcoeff=coeffs_from_db.distance_coeff)
 
 
@@ -232,14 +258,45 @@ def admin():
 @login_required # I added this cuz the docs do this. The lab code didn't have this :: aeam
 def logout():
     logout_user()
-    return 'Logged out'
+    return '''
+        <html lang="en">
+        <head>
+            <link rel="stylesheet" href="/static/css/login.css">
+            <script src="https://unpkg.com/htmx.org@1.9.8"></script>
+        </head>
+
+        <body>
+            <h1 align="center"> You have been LOGGED OUT! </h1>
+        </body>
+        </html>
+
+
+            '''
 
 # Handle unauthenticated users that access protected routes
 @login_manager.unauthorized_handler
 def unauthorized_handler():
-     return 'Unauthorized', 401
+    unauthorized_msg = '''
+        <html lang="en">
+        <head>
+            <link rel="stylesheet" href="/static/css/login.css">
+            <script src="https://unpkg.com/htmx.org@1.9.8"></script>
+        </head>
+
+        <body>
+            <h1 align="center"> NOT AUHTORIZED!!! </h1>
+            <br/><br/>
+            <h3 align="center"> You IP has been recorded </h3>
+        </body>
+        </html>'''
+    
+    return unauthorized_msg, 401
 
 #----------------   END Login/Logout + update coefficients table --------------------
 
 if __name__=="__main__":
 	app.run(host='0.0.0.0', port=5000, debug=True)
+      
+
+
+

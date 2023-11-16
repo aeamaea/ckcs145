@@ -21,4 +21,6 @@
 	    - enhance lab11 login/logout with update of the jwfoods.Coeffs.[weight_coeff,distance_coeffs] 
 		updates and stuff ✅
 	    - put the login/logout (admin code) into the jwfoods app.py and make it work (WIP) 
-
+	- Nov 13, 2023
+	 * Use HTMX instead of direct AJAX requests just for the fun of it, 
+           - Create a copy of the company1.1.html and use HTMX for the delivery calc and Contact form
