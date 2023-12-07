@@ -4,7 +4,7 @@ from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support import expected_conditions as Expect
 
 # set up options for webdriver
 options = Options()
@@ -30,9 +30,9 @@ searchBar.send_keys('\n')
 def scrape():
    pageInfo = []
    try:
-      # wait 10 seconds for search results to be retrieved
+      # wait 10 sexpectonds for search results to be retrieved
       WebDriverWait(driver, 10).until(
-      EC.presence_of_element_located((By.CLASS_NAME, "g"))
+      Expect.presence_of_element_located((By.CLASS_NAME, "g"))
       )
     
    except Exception as e:
@@ -71,13 +71,16 @@ infoAll = []
 infoAll.extend(scrape())
 
 # Harvested data from subsequent pages
-for i in range(0 , numPages - 1):
-   # Click on next link form the search results page
-   nextButton = driver.find_element(By.LINK_TEXT, 'Next')
-   nextButton.click()
-   
-   # Harvest next search results page
-   infoAll.extend(scrape())
+try:
+   for i in range(0 , numPages - 1):
+      # Click on next link form the search results page
+      nextButton = driver.find_element(By.LINK_TEXT, 'Next')
+      nextButton.click()
+      
+      # Harvest next search results page
+      infoAll.extend(scrape())
+except:
+   print("ERROR while trying to click Next. Stopping!")
 
 # Print all harvested data
 print()

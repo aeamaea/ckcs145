@@ -105,7 +105,7 @@ def calc_charges():
     #return jsonify({"delivery_cost" : delivery_cost})
 
     # return f'<h6>Delivery cost: {delivery_cost}</h6>'
-    return f'<div id="contact_status" class="alert alert-success" role="alert">Delivery cost: {delivery_cost}</div>'
+    return f'<div id="contact_status" class="alert alert-success" role="alert">Delivery cost: ${delivery_cost}</div>'
 
 @app.route("/add_contact",methods=["POST"])
 def add_contact():
@@ -124,9 +124,9 @@ def add_contact():
     print("\n\n---\ndb operation status: ",list(db_opstatus),"\n---\n\n")
 
     if db_opstatus:
-        return f'<div id="contact_status" class="alert alert-success" role="alert">SUCCESS!</div>'
+        return f'<div id="contact_status" class="alert alert-success" role="alert">{contact_name} has been added.</div>'
     else:
-        return f'<div id="contact_status" class="alert alert-success" role="alert">FAIL!</div>'
+        return f'<div id="contact_status" class="alert alert-success" role="alert">Operation Failed!</div>'
 
 #----------------   End main page related routes --------------------
 
@@ -156,23 +156,36 @@ def user_loader(email):
 @app.route("/login", methods=['GET','POST'])
 def login():
     if request.method == 'GET':
+        # nasty code alert! 
         return '''
         <html lang="en">
         <head>
-            <link rel="stylesheet" href="/static/css/login.css">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+            <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet" type="text/css">
+            <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+            <!-- <link rel="stylesheet" href="/static/css/login.css"> -->
             <script src="https://unpkg.com/htmx.org@1.9.8"></script>
         </head>
         
-        <body>
-
-        </body>
-        </html>
-            <form action='/login' method='POST'>
+        <body style="background-color:#f07752">
+        <div  class="container-fluid">
+            <div class="row">
+                <div class="col-sm-12">
+                    <form action='/login' method='POST'>
                     username &nbsp; <input type='text' name='email' id='email' placeholder='email'/> <br /> &nbsp; <br />
                     password &nbsp; <input type='password' name='password' id='password' placeholder='password'/> <br /> &nbsp; <br />
                     <input type='submit' name='submit'/>
                 </form>
-            '''
+                </div>
+            </div>
+        </div>
+        </body>
+        </html>
+        
+        '''
 
     email = request.form['email']
 
@@ -188,7 +201,32 @@ def login():
         login_user(user)    # we call login_user() with user object whose id attribute we just set. mmkay?
         return redirect(url_for('admin'))
 
-    return 'Incorrect login'
+    return '''
+        <html lang="en">
+        <head>
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+            <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet" type="text/css">
+            <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+            <!-- <link rel="stylesheet" href="/static/css/login.css"> -->
+            <script src="https://unpkg.com/htmx.org@1.9.8"></script>
+        </head>
+        
+        <body style="background-color:#f07752">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-12">
+                    <h1 align="center">Incorrect login</h1>
+                </div>
+            </div>
+        </div>
+        </body>
+        </html>
+        
+        '''
+    
 
 
 # Protected route hence user must be logged in to access it.
@@ -205,19 +243,34 @@ def admin():
         return '''
         <html lang="en">
         <head>
-            <link rel="stylesheet" href="/static/css/login.css">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+            <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet" type="text/css">
+            <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+            <!-- <link rel="stylesheet" href="/static/css/login.css"> -->
             <script src="https://unpkg.com/htmx.org@1.9.8"></script>
         </head>
 
-        <body>
-            <h3>Change Values and press Submit</h3>
-            <form action='/admin' method='POST'>
-                    weight coefficient &nbsp; <input type='text' name='weight_coeff' id='weight_coeff' placeholder='Weight Coeff like 0.3 etc' value='{wcoeff}' /> <br /> &nbsp; <br />
-                    distance coefficient &nbsp; <input type='text' name='distance_coeff' id='distance_coeff' placeholder='Weight Coeff like 0.5 etc' value='{dcoeff}' /> <br /> &nbsp; <br />
-                    <input type='submit' name='submit'/>
-            </form>
-            <br/><br/>
-            <h2><a href="logout">LOG OUT</a></h2>
+        <body style="background-color:#f07752">
+        <div class="container-fluid text-center">
+            <div class="row" align="center">
+                <div class="col-sm-8">
+                    <h3>Change Values and press Submit</h3>
+                    <form action='/admin' method='POST'>
+                        weight coefficient &nbsp; <input type='text' name='weight_coeff' id='weight_coeff' placeholder='Weight Coeff like 0.3 etc' value='{wcoeff}' /> <br /> &nbsp; <br />
+                        distance coefficient &nbsp; <input type='text' name='distance_coeff' id='distance_coeff' placeholder='Weight Coeff like 0.5 etc' value='{dcoeff}' /> <br /> &nbsp; <br />
+
+                        <input class="btn btn-default pull-right" type='submit' name='submit'/>
+                    </form>
+                    <br/>
+                    <div class="col-sm-8">
+                        <h2><a href="logout">LOG OUT</a></h2>
+                    </div>
+                </div>
+            </div>
+        </div>
         </body>
         </html>
 
@@ -258,15 +311,24 @@ def admin():
 @login_required # I added this cuz the docs do this. The lab code didn't have this :: aeam
 def logout():
     logout_user()
+    # this is nasty indeed. It needs to go into its own HTML template :: aeam
     return '''
         <html lang="en">
         <head>
-            <link rel="stylesheet" href="/static/css/login.css">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+            <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet" type="text/css">
+            <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+            <!-- <link rel="stylesheet" href="/static/css/login.css"> -->
             <script src="https://unpkg.com/htmx.org@1.9.8"></script>
         </head>
 
-        <body>
+        <body style="background-color:#f07752">
+        <div class="jumbotron text-center bg-gray" style="background-color:#f07752" >
             <h1 align="center"> You have been LOGGED OUT! </h1>
+        </div>
         </body>
         </html>
 
@@ -279,14 +341,21 @@ def unauthorized_handler():
     unauthorized_msg = '''
         <html lang="en">
         <head>
-            <link rel="stylesheet" href="/static/css/login.css">
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+            <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet" type="text/css">
+            <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+            <!-- <link rel="stylesheet" href="/static/css/login.css"> -->
             <script src="https://unpkg.com/htmx.org@1.9.8"></script>
         </head>
 
-        <body>
-            <h1 align="center"> NOT AUHTORIZED!!! </h1>
-            <br/><br/>
-            <h3 align="center"> You IP has been recorded </h3>
+        <body style="color:#f07752">
+            <div class="jumbotron text-center bg-gray" >
+                <h1 align="center"> NOT AUHTORIZED!!! </h1>
+            </div>
         </body>
         </html>'''
     
