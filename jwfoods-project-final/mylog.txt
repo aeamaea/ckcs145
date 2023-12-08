@@ -1,0 +1,26 @@
+10-28-23 :: aeam 
+	Basic Architecture:
+	* Use single app.py
+	* Use Postgresql with pugsql pip module
+	* Use bootstrap to make it "look nice" 
+	* Have admin interface 
+		- Login/Logout
+		- Form to update the "exchange rate"
+		- 
+
+
+
+* TODOS: *
+✅	- Get bootstrap template
+✅	- Create flask app skeleton (just app.py? don't get too fancy!)
+✅	- Use secrets file (.env) so they don't leak out to public when repo is made public
+✅	- create mongo DB (jwfoods) 
+	    - Created Collections ✅
+	    - finish the lab11 ✅
+	    - connect lab11 user/pw system to the back end ✅
+	    - enhance lab11 login/logout with update of the jwfoods.Coeffs.[weight_coeff,distance_coeffs] 
+		updates and stuff ✅
+	    - put the login/logout (admin code) into the jwfoods app.py and make it work (WIP) 
+	- Nov 13, 2023
+	 * Use HTMX instead of direct AJAX requests just for the fun of it, 
+           - Create a copy of the company1.1.html and use HTMX for the delivery calc and Contact form
