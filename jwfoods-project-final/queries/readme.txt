@@ -1,0 +1,1 @@
+these queries are NOT used in the final version of the project. This is from the time I was thinking of using pug sql to talk to a postgresql backend in Flask, but now I'm just using mongodb and didn't use pugsql at all. These are left here just in case. :: aeam Dec 2023
