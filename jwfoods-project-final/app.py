@@ -1,5 +1,5 @@
 #=======
-# HTMX version of the jwfoods app :: aeam :: 11/13/23
+# Final version of the jwfoods app :: aeam :: 12/10/23
 #=======
 import logging
 
